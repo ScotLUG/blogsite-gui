@@ -2,3 +2,42 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 // endbower
+$brand-primary:         #428bca !default;
+$brand-success:         #5cb85c !default;
+$brand-info:            #5bc0de !default;
+$brand-warning:         #f0ad4e !default;
+$brand-danger:          #d9534f !default;
+
+#navbar-slick{
+  background: #FFF;
+  border: none;
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+
+.blogframe{
+  height: 500px;
+  width: 100%;
+  background: url("../images/Munch_21.jpg");
+  background-size: 100% auto;
+  background-position: center;
+}
+
+@media(max-width: 768px){
+  .blogframe{
+    height: 250px;
+  }
+}
+
+
+.liveeditor{
+  height: 400px;
+  z-index: 10;
+}
+
+.editorbar{
+  position: fixed;
+  right: 20px;
+  top: 60px;
+  z-index: 20
+}
