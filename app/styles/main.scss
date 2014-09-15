@@ -8,6 +8,10 @@ $brand-info:            #5bc0de !default;
 $brand-warning:         #f0ad4e !default;
 $brand-danger:          #d9534f !default;
 
+body, html {
+  height: 100%
+}
+
 #navbar-slick{
   background: #FFF;
   border: none;
@@ -31,7 +35,7 @@ $brand-danger:          #d9534f !default;
 
 
 .liveeditor{
-  height: 400px;
+  min-height: 800px ;
   z-index: 10;
 }
 

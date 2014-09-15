@@ -11,9 +11,17 @@ angular.module('blognihonioApp')
   .controller('EditorCtrl', function ($scope, EditorTool) {
   	window.$(".liveeditor").focus();
   	window.$(".liveeditor").focusout(function(){window.$(".liveeditor").focus});
-  	$scope.bold = EditorTool.bold;
-  	$scope.italic = EditorTool.italic;
-  	$scope.underline = EditorTool.underline;
+
+  	//Load in the different functions
+  	var functions = ['bold', 'italic','underline','unorderedlist','orderedlist','image','container']
+  	for (var i = functions.length - 1; i >= 0; i--) {
+  		var name = functions[i];
+  		$scope[name] = EditorTool[name];
+  	};
+
+  	$scope.save = function(){
+  		console.log(window.$(".liveeditor").html());
+  	}
   })
   .factory('EditorTool', function(){
 
@@ -69,6 +77,11 @@ angular.module('blognihonioApp')
     	}
 	}
 
+	EditorTool.prototype.getSelectionStart = function() {
+	   var node = document.getSelection().anchorNode;
+	   return (node.nodeType == 3 ? node.parentNode : node);
+	}
+
 	EditorTool.prototype.replaceSelectedText = function(replacementText) {
 	    var sel, range;
 	    if (window.getSelection) {
@@ -103,13 +116,14 @@ angular.module('blognihonioApp')
 	    return html;
 	}
 
-	EditorTool.prototype.doTextStyle = function(element){
+	EditorTool.prototype.doTextStyle = function(element, cssclass){
 		var sel = window.getSelection();
+		var cssclass = (cssclass) ? " class='"+cssclass+"'" : "";
 		if (sel.getRangeAt(0).endOffset > 0) {
 			var html = EditorTool.prototype.getSelectionHtml();
-			EditorTool.prototype.pasteHtmlAtCaret("<"+element+">"+html+"</"+element+">");
+			EditorTool.prototype.pasteHtmlAtCaret("<"+element+cssclass+">"+html+"</"+element+">");
 		} else {
-			EditorTool.prototype.pasteHtmlAtCaret("<"+element+">Text</"+element+">",true);
+			EditorTool.prototype.pasteHtmlAtCaret("<"+element+cssclass+">Text</"+element+">",true);
 		}
 	}
 
@@ -123,6 +137,34 @@ angular.module('blognihonioApp')
 
 	EditorTool.prototype.underline = function(){
 		EditorTool.prototype.doTextStyle("u");
+	}
+
+	EditorTool.prototype.image = function(){
+		EditorTool.prototype.pasteHtmlAtCaret("</div></div><div class='blogframe'></div><div class='container'>",true);
+	}
+
+	EditorTool.prototype.container = function(){
+		EditorTool.prototype.doTextStyle("div", "container");
+	}
+
+	EditorTool.prototype.unorderedlist = function(){
+		var sel = window.getSelection();
+		if (sel.getRangeAt(0).endOffset > 0) {
+			var html = EditorTool.prototype.getSelectionHtml();
+			EditorTool.prototype.pasteHtmlAtCaret("<ul><li>"+html+"</li></ul>");
+		} else {
+			EditorTool.prototype.pasteHtmlAtCaret("<ul><li>Item 1</li></ul>",true);
+		}	
+	}
+
+	EditorTool.prototype.orderedlist = function(){
+		var sel = window.getSelection();
+		if (sel.getRangeAt(0).endOffset > 0) {
+			var html = EditorTool.prototype.getSelectionHtml();
+			EditorTool.prototype.pasteHtmlAtCaret("<ol><li>"+html+"</li></ol>");
+		} else {
+			EditorTool.prototype.pasteHtmlAtCaret("<ol><li>Item 1</li></ol>",true);
+		}	
 	}
 
 	return new EditorTool();
