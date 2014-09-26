@@ -1,10 +1,12 @@
 <div class='liveeditor' contenteditable='true'>
+		{{content}}
+
+
+</div>
 	<div class='container'>
 	<h1 class='title'>Title</h1>
 	</div>
 	Out of container
-</div>
-
 <div class='editorbar'>
 	<div class="btn-group">
 	  <div class="btn-group">
@@ -13,11 +15,12 @@
   	      <span class="caret"></span>
   	    </a>
   	    <ul class="dropdown-menu" role="menu">
-  	      <li><a href="#">Heading</a></li>
-  	      <li><a href="#">Subheading</a></li>
-  	      <li><a href="#">Quote</a></li>
+  	      <li><a ng-click="header2()" href="">Heading</a></li>
+  	      <li><a ng-click="header3()" href="">Subheading</a></li>
+  	      <li><a ng-click="header1()" href="">Quote</a></li>
   	    </ul>
   	  </div>
+  	  <a ng-click="header1()" href="" class="btn btn-default"><i class='fa fa-font'></i> Heading 1</a>
 	  <a ng-click="bold()" href="" class="btn btn-default"><i class='fa fa-bold'></i></a>
 	  <a ng-click="italic()" href="" class="btn btn-default"><i class='fa fa-italic'></i></a>
 	  <a ng-click="underline()" href="" class="btn btn-default"><i class='fa fa-underline'></i></a>

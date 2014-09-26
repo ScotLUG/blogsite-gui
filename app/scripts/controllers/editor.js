@@ -8,12 +8,13 @@
  * Controller of the blognihonioApp
  */
 angular.module('blognihonioApp')
-  .controller('EditorCtrl', function ($scope, EditorTool) {
+  .controller('EditorCtrl', function ($scope, $routeParams, EditorTool, BlogApi) {
+
   	window.$(".liveeditor").focus();
   	window.$(".liveeditor").focusout(function(){window.$(".liveeditor").focus});
 
   	//Load in the different functions
-  	var functions = ['bold', 'italic','underline','unorderedlist','orderedlist','image','container']
+  	var functions = ['header1','header2','header3','bold', 'italic','underline','unorderedlist','orderedlist','image','container']
   	for (var i = functions.length - 1; i >= 0; i--) {
   		var name = functions[i];
   		$scope[name] = EditorTool[name];
@@ -22,6 +23,15 @@ angular.module('blognihonioApp')
   	$scope.save = function(){
   		console.log(window.$(".liveeditor").html());
   	}
+  	var blogApi = new BlogApi();
+
+  	blogApi.getPost($routeParams.editor, function(err, result){
+  		$scope.content = result.content;
+  	});
+
+
+
+
   })
   .factory('EditorTool', function(){
 
@@ -117,6 +127,7 @@ angular.module('blognihonioApp')
 	}
 
 	EditorTool.prototype.doTextStyle = function(element, cssclass){
+		//window.$('.liveeditor').focus();
 		var sel = window.getSelection();
 		var cssclass = (cssclass) ? " class='"+cssclass+"'" : "";
 		if (sel.getRangeAt(0).endOffset > 0) {
@@ -129,6 +140,18 @@ angular.module('blognihonioApp')
 
 	EditorTool.prototype.bold = function(){
 		EditorTool.prototype.doTextStyle("b");
+	}
+
+	EditorTool.prototype.header1 = function(){
+		EditorTool.prototype.doTextStyle("h1");
+	}
+
+	EditorTool.prototype.header2 = function(){
+		EditorTool.prototype.doTextStyle("h2");
+	}
+
+	EditorTool.prototype.header3 = function(){
+		EditorTool.prototype.doTextStyle("h3");
 	}
 
 	EditorTool.prototype.italic = function(){

@@ -1,0 +1,15 @@
+<div class='container'>
+	<h3>Administration</h3>
+	<table class='table'>
+		<thead>
+			<tr><th>Name</th><th>URL</th><th>Actions</th></tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat='post in posts'>
+				<td>{{post.name}}</td>
+				<td>{{post.url}}</td>
+				<td><a ng-href="#editor/{{post.url}}"><i class='fa fa-edit'></i> </a><a ng-href="delete/{{post.url}}"><i class='fa fa-remove'></i> <a ng-href="publish/{{post.url}}"><i class='fa fa-share'></i> </a></td>
+			</tr>
+		</tbody>
+	</table>
+</div>

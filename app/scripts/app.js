@@ -27,9 +27,13 @@ angular
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl'
       })
-      .when('/editor', {
+      .when('/editor/:editor', {
         templateUrl: 'views/editor.html',
         controller: 'EditorCtrl'
+      })
+      .when('/blogmin', {
+        templateUrl: 'views/admin.html',
+        controller: 'AdminCtrl'
       })
       .otherwise({
         redirectTo: '/'
