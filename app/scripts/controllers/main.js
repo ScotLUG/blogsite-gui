@@ -12,8 +12,21 @@ angular.module('blognihonioApp')
 
   	var blog = new BlogApi();
   	blog.getPosts(function(err, res){
-  		$scope.blog = res;
+  		$scope.blogs = res;
   	})
+
+  	$scope.formatDate = function(date){
+  		var dateFormat = new Date(date);
+  		var dateString = "";
+  		dateString += dateFormat.getFullYear()+"-";
+  		dateString += ((dateFormat.getMonth()<9) ? "0"+(dateFormat.getMonth()+1) : dateFormat.getMonth()+1)+"-";
+  		dateString += ((dateFormat.getDate()<9) ? "0"+(dateFormat.getDate()) : dateFormat.getDate())+" at ";
+  		dateString += ((dateFormat.getHours()<9) ? "0"+(dateFormat.getHours()) : dateFormat.getHours())+":"
+  		dateString += ((dateFormat.getMinutes()<9) ? "0"+(dateFormat.getMinutes()) : dateFormat.getMinutes())
+
+  		return dateString;
+
+  	}
 
     $scope.awesomeThings = [
       'HTML5 Boilerplate',
@@ -56,8 +69,18 @@ angular.module('blognihonioApp')
   		})
   	}
 
-  	BlogApi.prototype.createPost = function(name, url, html){
+  	BlogApi.prototype.createPost = function(blogpost, cb){
+  		$http({method: 'post', url: apilocation+"post?key="+this.apikey, data: blogpost})
+  		.success(function(data, status, headers, config){
+  			cb(null, data);
+  		})
+  	}
 
+  	BlogApi.prototype.updatePost = function(blogpost, cb){
+  		$http({method: 'post', url: apilocation+"post/"+blogpost.url+"?key="+this.apikey, data: blogpost})
+  		.success(function(data, status, headers, config){
+  			cb(null, data);
+  		})
   	}
 
   	return BlogApi;

@@ -9,6 +9,11 @@
  */
 angular.module('blognihonioApp')
   .controller('EditorCtrl', function ($scope, $routeParams, EditorTool, BlogApi) {
+  	$scope.blogpost = {};
+
+  	if($routeParams.editor == 'create'){
+  		$scope.newBlogpost = true;
+  	}
 
   	window.$(".liveeditor").focus();
   	window.$(".liveeditor").focusout(function(){window.$(".liveeditor").focus});
@@ -19,15 +24,41 @@ angular.module('blognihonioApp')
   		var name = functions[i];
   		$scope[name] = EditorTool[name];
   	};
+	var blogApi = new BlogApi('test');
 
   	$scope.save = function(){
-  		console.log(window.$(".liveeditor").html());
+  		blogApi.createPost($scope.blogpost,function(err,data){
+  			console.log(data)
+  		})
   	}
-  	var blogApi = new BlogApi();
 
-  	blogApi.getPost($routeParams.editor, function(err, result){
-  		$scope.content = result.content;
-  	});
+  	$scope.update = function(){
+  		blogApi.updatePost($scope.blogpost,function(err,data){
+  			console.log(data)
+  		})
+  	}
+  	
+
+  	$scope.updateUrl = function(blogpost){
+  		blogpost.url  = blogpost.name.replace(/[^a-z0-9]/gi, '-').toLowerCase();
+  	}
+
+
+  	//If the route is create then create a new editor
+  	if ($routeParams.editor == 'create'){
+  		console.log("Creating a new Blog Post")
+
+  		$scope.blogpost.name = "New Blogpost"
+  		$scope.blogpost.url = "new-url"
+  		$scope.blogpost.content = "<div class='container'><h3>Title</h3><p>First Line of text</p></div>Out of container";
+  		console.log($scope)
+  	} else {
+  		blogApi.getPost($routeParams.editor, function(err, result){
+  			$scope.blogpost.name = result.name;
+  			$scope.blogpost.url = result.url;
+  			$scope.blogpost.content = result.content;
+  		});
+  	}
 
 
 
@@ -191,4 +222,27 @@ angular.module('blognihonioApp')
 	}
 
 	return new EditorTool();
-  });
+  }).directive('contenteditable', function() {
+    return {
+      restrict: 'A',
+      require: '?ngModel',
+      link: function(scope, element, attr, ngModel) {
+        var read;
+        if (!ngModel) {
+          return;
+        }
+        ngModel.$render = function() {
+          return element.html(ngModel.$viewValue);
+        };
+        element.bind('blur', function() {
+          if (ngModel.$viewValue !== $.trim(element.html())) {
+            return scope.$apply(read);
+          }
+        });
+        return read = function() {
+          console.log("read()");
+          return ngModel.$setViewValue($.trim(element.html()));
+        };
+      }
+    };
+  });;

@@ -1,9 +1,12 @@
 
-<div class='blogframe'>
 
-</div>
-<div class='container'>
-  <h1>Munchen 2014</h1>
-  <p>I went to munich last week, it was pretty awesome</p>
-  <p>The food and drink here are great.</p>
+<div ng-repeat='blog in blogs'>
+  
+  <div ng-bind-html="blog.content">
+
+  </div>
+  <div class='container'>
+    <br>
+    <p><i>Published on {{formatDate(blog.createdAt)}}</i> <a style='float:right' href="#{{blog.url}}">View Full Post &gt;</a></p>
+  </div>
 </div>
